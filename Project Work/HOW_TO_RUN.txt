@@ -1,0 +1,51 @@
+========================================================================
+    INNOVEXA — FAKE PROFILE DETECTION SYSTEM (QUICKSTART GUIDE)
+========================================================================
+
+Welcome! This package contains the complete full-stack Innovexa Fake
+Profile Detection application (FastAPI Backend + Modern Glassmorphism Web UI).
+
+------------------------------------------------------------------------
+PREREQUISITES:
+------------------------------------------------------------------------
+1. Windows 10 or 11
+2. Python 3.10 or newer (download from https://www.python.org/downloads/)
+   * CRITICAL: Make sure to check the box "Add python.exe to PATH"
+     during the Python installation!
+
+------------------------------------------------------------------------
+HOW TO RUN IN 2 EASY STEPS:
+------------------------------------------------------------------------
+
+STEP 1: Install Dependencies (Run only the first time)
+  -> Double-click on:
+     install_requirements.bat
+
+  -> This will install:
+     fastapi, uvicorn, scikit-learn, joblib, pandas, numpy,
+     networkx, python-louvain, and pydantic.
+  -> Wait until you see "Setup Complete! All dependencies installed."
+
+STEP 2: Launch Application
+  -> Double-click on:
+     run_application.bat
+
+  -> What happens automatically:
+     1. Starts the FastAPI Machine Learning Backend on port 8000.
+     2. Starts the Web Dashboard on port 3000.
+     3. Automatically opens your default web browser to:
+        http://127.0.0.1:3000
+
+------------------------------------------------------------------------
+HOW TO STOP THE SERVERS:
+------------------------------------------------------------------------
+Simply press [Ctrl + C] in the runner window, or close the terminal window.
+Both background servers will cleanly shut down.
+
+------------------------------------------------------------------------
+APPLICATION LINKS:
+------------------------------------------------------------------------
+* Web Dashboard:           http://127.0.0.1:3000
+* Interactive API Docs:    http://127.0.0.1:8000/docs
+* Health Check Endpoint:   http://127.0.0.1:8000/api/health
+========================================================================
