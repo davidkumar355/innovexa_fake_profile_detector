@@ -1,0 +1,24 @@
+# Python / Virtual Environment
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+env/
+venv/
+ENV/
+
+# Large PPT binaries (>70MB)
+*.pptx
+research_paper.docx
+
+# SQLite databases & runtime logs
+*.db
+*.log
+*.sqlite3
+
+# OS / Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

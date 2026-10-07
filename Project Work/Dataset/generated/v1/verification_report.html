@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Synthetic Fake Injection Acceptance Report</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 30px; background: #f8f9fa; color: #212529; }
+        .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h1 { color: #1b2a4e; border-bottom: 2px solid #e9ecef; padding-bottom: 12px; }
+        .summary-card { display: flex; gap: 20px; margin-bottom: 25px; }
+        .metric-box { flex: 1; background: #eef2f7; padding: 15px; border-radius: 6px; text-align: center; }
+        .metric-num { font-size: 26px; font-weight: bold; color: #1b2a4e; }
+        .metric-label { font-size: 13px; color: #6c757d; margin-top: 4px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e9ecef; font-size: 14px; }
+        th { background: #f1f3f5; color: #495057; }
+        .status-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 15px; font-weight: bold; }
+        .badge-pass { background: #d4edda; color: #155724; }
+        .badge-fail { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Synthetic Fake Injection Acceptance Report</h1>
+        <div style="margin-bottom: 20px;">
+            Overall Acceptance Status: 
+            <span class="status-badge badge-pass">
+                PASS (23 / 23 Checks Passed)
+            </span>
+        </div>
+        <div class="summary-card">
+            <div class="metric-box">
+                <div class="metric-num">4489</div>
+                <div class="metric-label">Total Nodes (4039 Real + 450 Fake)</div>
+            </div>
+            <div class="metric-box">
+                <div class="metric-num">102,561</div>
+                <div class="metric-label">Total Edges (14,327 Injected)</div>
+            </div>
+            <div class="metric-box">
+                <div class="metric-num">10.02%</div>
+                <div class="metric-label">Fake Class Ratio</div>
+            </div>
+            <div class="metric-box">
+                <div class="metric-num">1,406</div>
+                <div class="metric-label">Unified Feature Space</div>
+            </div>
+        </div>
+        <h3>Exhaustive Audit Results</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Section</th>
+                    <th>Audit Gate</th>
+                    <th>Expected</th>
+                    <th>Actual</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td><strong>1. Structural</strong></td>
+            <td>Total node count</td>
+            <td><code>4489</code></td>
+            <td>4489</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>1. Structural</strong></td>
+            <td>Total edge count</td>
+            <td><code>102561</code></td>
+            <td>102561</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>1. Structural</strong></td>
+            <td>Fake ratio in range [8%, 12%]</td>
+            <td><code>8.0 - 12.0%</code></td>
+            <td>10.02%</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>1. Structural</strong></td>
+            <td>Largest component coverage</td>
+            <td><code>>= 99.0%</code></td>
+            <td>100.00%</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>1. Structural</strong></td>
+            <td>No isolated fake nodes</td>
+            <td><code>0</code></td>
+            <td>0</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>1. Structural</strong></td>
+            <td>No disconnected fake-only components</td>
+            <td><code>0</code></td>
+            <td>0</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>2. Features</strong></td>
+            <td>Matrix shape</td>
+            <td><code>(4489, 1406)</code></td>
+            <td>(4489, 1406)</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>2. Features</strong></td>
+            <td>No NaN or Infinite values</td>
+            <td><code>0</code></td>
+            <td>None found</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>2. Features</strong></td>
+            <td>Binary values only {0, 1}</td>
+            <td><code>{0, 1}</code></td>
+            <td>{np.uint8(0), np.uint8(1)}</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>2. Features</strong></td>
+            <td>Archetype A mean density</td>
+            <td><code>< 0.05</code></td>
+            <td>0.0148</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>2. Features</strong></td>
+            <td>Archetype B mean density</td>
+            <td><code>0.10 - 0.30</code></td>
+            <td>0.1800</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>3. Labels</strong></td>
+            <td>Label domain</td>
+            <td><code>{0, 1}</code></td>
+            <td>{np.uint8(0), np.uint8(1)}</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>3. Labels</strong></td>
+            <td>Genuine node count</td>
+            <td><code>4039</code></td>
+            <td>4039</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>3. Labels</strong></td>
+            <td>Fake node count</td>
+            <td><code>450</code></td>
+            <td>450</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>3. Labels</strong></td>
+            <td>ID-ordering leakage (tail clustering)</td>
+            <td><code>False (Interleaved)</code></td>
+            <td>False</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>4. Archetypes</strong></td>
+            <td>Archetype A count (~25%)</td>
+            <td><code>112 (+-5)</code></td>
+            <td>112</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>4. Archetypes</strong></td>
+            <td>Archetype B count (~35%)</td>
+            <td><code>157 (+-5)</code></td>
+            <td>157</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>4. Archetypes</strong></td>
+            <td>Archetype C count (~30%)</td>
+            <td><code>135 (+-5)</code></td>
+            <td>135</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>4. Archetypes</strong></td>
+            <td>Archetype D count (~10%)</td>
+            <td><code>46 (+-5)</code></td>
+            <td>46</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>5. Difficulty Gates</strong></td>
+            <td>Degree threshold precision</td>
+            <td><code>< 65.0%</code></td>
+            <td>0.00%</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>5. Difficulty Gates</strong></td>
+            <td>Feature sparsity precision</td>
+            <td><code>< 70.0%</code></td>
+            <td>2.48%</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>6. Reproducibility</strong></td>
+            <td>Fixed random seed</td>
+            <td><code>42</code></td>
+            <td>42</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+        <tr>
+            <td><strong>6. Reproducibility</strong></td>
+            <td>ID shuffle map bijective</td>
+            <td><code>4489 entries</code></td>
+            <td>4489</td>
+            <td style="color: #28a745; font-weight: bold;">[PASS]</td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

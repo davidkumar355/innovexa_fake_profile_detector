@@ -1,0 +1,64 @@
+{
+  "total_profiles_analyzed": 674,
+  "fake_detected": 60,
+  "genuine_detected": 614,
+  "high_risk_pending_review": 31,
+  "true_fake_count": 68,
+  "true_genuine_count": 606,
+  "model_accuracy": 0.9851632047477745,
+  "model_f1_score": 0.921875,
+  "model_precision": 0.9833333333333333,
+  "model_recall": 0.8676470588235294,
+  "model_auc": 0.998374102116094,
+  "threshold": 0.4,
+  "archetype_distribution": {
+    "A": 14,
+    "B": 22,
+    "C": 24,
+    "D": 8
+  },
+  "detections_over_time": [
+    {
+      "day": "Mon",
+      "fake_detected": 6,
+      "genuine_detected": 90,
+      "total_analyzed": 96
+    },
+    {
+      "day": "Tue",
+      "fake_detected": 6,
+      "genuine_detected": 90,
+      "total_analyzed": 96
+    },
+    {
+      "day": "Wed",
+      "fake_detected": 4,
+      "genuine_detected": 92,
+      "total_analyzed": 96
+    },
+    {
+      "day": "Thu",
+      "fake_detected": 13,
+      "genuine_detected": 83,
+      "total_analyzed": 96
+    },
+    {
+      "day": "Fri",
+      "fake_detected": 13,
+      "genuine_detected": 83,
+      "total_analyzed": 96
+    },
+    {
+      "day": "Sat",
+      "fake_detected": 8,
+      "genuine_detected": 88,
+      "total_analyzed": 96
+    },
+    {
+      "day": "Sun",
+      "fake_detected": 10,
+      "genuine_detected": 88,
+      "total_analyzed": 98
+    }
+  ]
+}

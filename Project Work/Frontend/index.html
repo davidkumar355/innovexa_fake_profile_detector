@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Innovexa — Fake Profile Detection Platform</title>
+  <meta name="description" content="Enterprise social graph integrity and fake account detection platform powered by graph-augmented machine learning.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/views.css">
+  <!-- Chart.js and vis-network for high-end visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="app-sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="brand-wrapper">
+          <div class="brand-icon">IN</div>
+          <span class="brand-text">INNOVEXA</span>
+        </a>
+        <button class="sidebar-toggle-btn" id="sidebar-toggle" title="Toggle Navigation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="nav-menu">
+        <a class="nav-item active" data-view="dashboard" id="nav-dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">Dashboard</span>
+        </a>
+        <a class="nav-item" data-view="browse" id="nav-browse">
+          <span class="nav-icon">🔍</span>
+          <span class="nav-text">Browse Profiles</span>
+        </a>
+        <a class="nav-item" data-view="simulate" id="nav-simulate">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-text">Simulate Profile</span>
+        </a>
+        <a class="nav-item" data-view="network" id="nav-network">
+          <span class="nav-icon">🌐</span>
+          <span class="nav-text">Network Analysis</span>
+        </a>
+        <a class="nav-item" data-view="history" id="nav-history">
+          <span class="nav-icon">📝</span>
+          <span class="nav-text">Detection History</span>
+        </a>
+        <a class="nav-item" data-view="modelinfo" id="nav-modelinfo">
+          <span class="nav-icon">🧠</span>
+          <span class="nav-text">Model Info</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="model-badge">
+          <div class="model-dot"></div>
+          <div class="model-meta">
+            <div class="model-title">RandomForest v1.0</div>
+            <div class="model-sub">Inference Engine Active</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN APP CANVAS -->
+    <main class="main-wrapper">
+      <!-- TOP HEADER -->
+      <header class="top-header">
+        <div class="page-title-box">
+          <h1 id="header-title">Security Overview Dashboard</h1>
+          <p id="header-sub">Real-time telemetry and synthetic injection detection benchmarks</p>
+        </div>
+        <div class="header-actions">
+          <div class="status-indicator">
+            <span class="dot"></span>
+            <span>API Connected (Port 8000)</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- VIEW 1: DASHBOARD OVERVIEW (Phase F1) -->
+      <section class="page-view active" id="view-dashboard">
+        <div class="kpi-grid">
+          <!-- Card 1 -->
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-label">Profiles Analyzed</span>
+              <div class="kpi-icon blue">👥</div>
+            </div>
+            <div class="kpi-value" id="kpi-total-profiles">674</div>
+            <div class="kpi-footer">
+              <span class="pill pill-info">Test Split</span>
+              <span>100% evaluated</span>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-label">Fakes Flagged</span>
+              <div class="kpi-icon red">🚨</div>
+            </div>
+            <div class="kpi-value" id="kpi-fake-detected">60</div>
+            <div class="kpi-footer">
+              <span class="pill pill-fake" id="kpi-f1-metric">F1: 0.9219</span>
+              <span>Precision: 98.3%</span>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-label">Genuine Verified</span>
+              <div class="kpi-icon green">🛡️</div>
+            </div>
+            <div class="kpi-value" id="kpi-genuine-detected">614</div>
+            <div class="kpi-footer">
+              <span class="pill pill-genuine" id="kpi-accuracy-metric">98.5% Accuracy</span>
+              <span>Low false positive</span>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-label">High-Risk Review</span>
+              <div class="kpi-icon amber">⚠️</div>
+            </div>
+            <div class="kpi-value" id="kpi-high-risk">31</div>
+            <div class="kpi-footer">
+              <span class="pill pill-warning">Risk >= 70%</span>
+              <span>Needs human audit</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <!-- Timeline Bar Chart -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Detections Over Time</h3>
+                <p class="card-desc">Comparative breakdown of detected fakes vs genuine profiles</p>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="chart-timeline"></canvas>
+            </div>
+          </div>
+
+          <!-- Archetypes Donut Chart -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Fakes by Archetype</h3>
+                <p class="card-desc">Distribution across behavioral profiles</p>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="chart-archetypes"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: BROWSE PROFILES (Phase F2) -->
+      <section class="page-view" id="view-browse">
+        <div class="browse-layout">
+          <!-- Left Table Panel -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Test Set Profile Directory</h3>
+                <p class="card-desc">Search and select individual graph profiles</p>
+              </div>
+            </div>
+
+            <div class="filter-bar">
+              <input type="number" id="browse-search-id" class="search-input" placeholder="Search by Node ID (e.g. 3442, 3807)...">
+              <select id="browse-filter-label" class="select-input">
+                <option value="">All Ground Truth Labels</option>
+                <option value="1">Fake Profiles (Class 1)</option>
+                <option value="0">Genuine Profiles (Class 0)</option>
+              </select>
+              <select id="browse-filter-arch" class="select-input">
+                <option value="">All Archetypes</option>
+                <option value="A">Archetype A (Feature Sparsity)</option>
+                <option value="B">Archetype B (Dense Feature Spammer)</option>
+                <option value="C">Archetype C (Camouflage Mimic)</option>
+                <option value="D">Archetype D (Sybil Ring)</option>
+              </select>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Node ID</th>
+                    <th>Ground Truth</th>
+                    <th>Risk Score</th>
+                    <th>Degree</th>
+                    <th>Cluster</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="browse-table-body">
+                  <!-- Injected dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="pagination">
+              <span id="browse-pagination-info">Page 1 of 45</span>
+              <div class="pagination-controls">
+                <button class="btn btn-secondary" id="btn-browse-prev" onclick="state.browsePage--; fetchBrowseProfiles();">Previous</button>
+                <button class="btn btn-secondary" id="btn-browse-next" onclick="state.browsePage++; fetchBrowseProfiles();">Next</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Detail & Model Decision Panel -->
+          <div class="card detail-card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Profile Inspection</h3>
+                <p class="card-desc">Live inference & structural breakdown</p>
+              </div>
+              <span class="pill pill-info" id="detail-node-id">#--</span>
+            </div>
+
+            <div class="profile-avatar-row">
+              <div class="profile-avatar">👤</div>
+              <div>
+                <h4 style="font-size: 1.1rem; color: var(--text-main);">Node Profile Entity</h4>
+                <div style="margin-top: 4px;"><span class="pill pill-genuine" id="detail-status-pill">Pending Selection</span></div>
+              </div>
+            </div>
+
+            <div class="risk-meter">
+              <div style="display:flex; justify-content:space-between; font-size: 0.85rem;">
+                <span style="color: var(--text-secondary);">Random Forest Probability</span>
+                <span style="font-weight:700;" id="detail-risk-pct">0.0%</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill" id="detail-meter-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="metric-strip">
+              <div class="metric-box">
+                <div class="metric-box-val" id="detail-degree">-</div>
+                <div class="metric-box-lbl">Connections</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-box-val" id="detail-clustering">-</div>
+                <div class="metric-box-lbl">Clustering Coeff</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-box-val" id="detail-community">-</div>
+                <div class="metric-box-lbl">Community</div>
+              </div>
+            </div>
+
+            <h4 style="font-size: 0.88rem; color: var(--text-main); margin-top: 20px;">Profile Attributes (From Global Schema)</h4>
+            <div class="attribute-tags" id="detail-attribute-tags">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: SIMULATE PROFILE (Phase F3) -->
+      <section class="page-view" id="view-simulate">
+        <div class="simulate-grid">
+          <!-- Configuration Panel -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Inductive Profile Simulator (Option B)</h3>
+                <p class="card-desc">Configure categorical profile features & select network links</p>
+              </div>
+              <span class="pill pill-info">Interactive Demo</span>
+            </div>
+
+            <h4 style="font-size: 0.88rem; color: var(--text-main); margin-bottom: 8px;">1. Select Categorical Profile Features</h4>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px;">Toggle behavioral profile attributes (education, hometown, work, languages, etc.):</p>
+
+            <div class="category-accordion" id="simulate-accordion">
+              <!-- Dynamic Category Groups -->
+            </div>
+
+            <h4 style="font-size: 0.88rem; color: var(--text-main); margin-top: 24px; margin-bottom: 8px;">2. Connect to Graph Neighbors</h4>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">Enter existing node IDs to establish social links (2-5 recommended):</p>
+
+            <div style="display:flex; gap:10px;">
+              <input type="number" id="simulate-conn-input" class="search-input" placeholder="Enter Node ID (0 - 4488)..." min="0" max="4488">
+              <button class="btn btn-secondary" id="btn-add-connection">+ Add Link</button>
+            </div>
+
+            <div class="connection-chips" id="simulate-connection-chips">
+              <!-- Injected chips -->
+            </div>
+
+            <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center;">
+              <div style="font-size: 0.82rem; color: var(--text-muted);">
+                Selected: <strong style="color:var(--text-main);"><span id="sim-active-feat-count">0</span> features</strong>,
+                <strong style="color:var(--text-main);"><span id="sim-active-conn-count">0</span> links</strong>
+              </div>
+              <button class="btn btn-primary" id="btn-run-simulation">🚀 Run Detection Model</button>
+            </div>
+          </div>
+
+          <!-- Simulation Result Panel -->
+          <div class="card" id="simulate-result-card" style="display: none;">
+            <!-- Injected on simulation complete -->
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: NETWORK ANALYSIS (Phase F4) -->
+      <section class="page-view" id="view-network">
+        <div class="network-layout">
+          <!-- Sidebar Cluster List -->
+          <div class="card" style="overflow: hidden; display: flex; flex-direction: column;">
+            <div class="card-header" style="margin-bottom: 12px;">
+              <div>
+                <h3 class="card-title">Detected Communities</h3>
+                <p class="card-desc">Ranked by fake ratio & risk score</p>
+              </div>
+            </div>
+            <div class="cluster-list" id="network-cluster-list">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Interactive Force Graph Panel -->
+          <div class="graph-canvas-box">
+            <div class="graph-legend">
+              <div class="legend-item">
+                <span class="legend-circle" style="background-color: #10b981;"></span>
+                <span>Verified Genuine Node</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-circle" style="background-color: #f43f5e;"></span>
+                <span>Detected Fake Profile</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-circle" style="background-color: #38bdf8;"></span>
+                <span>Selected / High Risk</span>
+              </div>
+            </div>
+            <div id="network-graph-container">
+              <!-- vis.js canvas -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: DETECTION HISTORY (Phase F5) -->
+      <section class="page-view" id="view-history">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Live Detection Interaction Ledger</h3>
+              <p class="card-desc">SQLite-backed transaction history of all browse and simulation activities</p>
+            </div>
+            <button class="btn btn-danger" id="btn-clear-history" style="font-size: 0.78rem; padding: 6px 12px;">Clear History</button>
+          </div>
+
+          <div class="filter-bar">
+            <select id="history-filter-mode" class="select-input">
+              <option value="">All Interaction Modes</option>
+              <option value="browse">Browse (Option A)</option>
+              <option value="simulate">Simulate (Option B)</option>
+            </select>
+            <select id="history-filter-pred" class="select-input">
+              <option value="">All Classification Outcomes</option>
+              <option value="1">Classified as Fake</option>
+              <option value="0">Classified as Genuine</option>
+            </select>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Record ID</th>
+                  <th>Profile Entity</th>
+                  <th>Mode</th>
+                  <th>Prediction</th>
+                  <th>Risk Score</th>
+                  <th>Timestamp (UTC)</th>
+                  <th>Interaction Context</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <span id="history-pagination-info">Page 1 of 1</span>
+            <div class="pagination-controls">
+              <button class="btn btn-secondary" id="btn-history-prev" onclick="state.historyPage--; fetchHistoryRecords();">Previous</button>
+              <button class="btn btn-secondary" id="btn-history-next" onclick="state.historyPage++; fetchHistoryRecords();">Next</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 6: MODEL INFO -->
+      <section class="page-view" id="view-modelinfo">
+        <div class="card" style="max-width: 900px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Model Architecture & Pipeline Benchmark</h3>
+              <p class="card-desc">Comparative analysis of active models and GNN readiness</p>
+            </div>
+            <span class="pill pill-genuine">Phase 6 Verified</span>
+          </div>
+
+          <div style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;">
+            <p style="margin-bottom: 16px;">
+              Innovexa utilizes a hybrid graph-augmented architecture designed to overcome the limitations of classic tabular classifiers when encountering camouflaged synthetic fake profiles.
+            </p>
+
+            <h4 style="color: var(--text-main); margin: 20px 0 10px;">Test Set Performance Benchmarks</h4>
+            <div class="table-wrapper" style="margin-bottom: 24px;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1 Score</th>
+                    <th>AUC-ROC</th>
+                    <th>Role in Dashboard</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background: rgba(56, 189, 248, 0.05);">
+                    <td style="font-weight:700; color:var(--primary);">Random Forest (Production)</td>
+                    <td>98.52%</td>
+                    <td>98.33%</td>
+                    <td>86.76%</td>
+                    <td>0.9219</td>
+                    <td>0.9984</td>
+                    <td><span class="pill pill-info">Active Engine</span></td>
+                  </tr>
+                  <tr>
+                    <td>Logistic Regression</td>
+                    <td>98.07%</td>
+                    <td>87.67%</td>
+                    <td>94.12%</td>
+                    <td>0.9078</td>
+                    <td>0.9962</td>
+                    <td>Baseline Reference</td>
+                  </tr>
+                  <tr>
+                    <td>SVM (RBF Kernel)</td>
+                    <td>97.92%</td>
+                    <td>88.57%</td>
+                    <td>91.18%</td>
+                    <td>0.8986</td>
+                    <td>0.9947</td>
+                    <td>Baseline Reference</td>
+                  </tr>
+                  <tr>
+                    <td>MLP (Neural Net)</td>
+                    <td>97.03%</td>
+                    <td>84.29%</td>
+                    <td>86.76%</td>
+                    <td>0.8551</td>
+                    <td>0.9915</td>
+                    <td>Baseline Reference</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h4 style="color: var(--text-main); margin: 20px 0 10px;">Fake Profile Archetypes</h4>
+            <ul style="padding-left: 20px; margin-bottom: 20px;">
+              <li><strong>Archetype A (Sparsity):</strong> Low feature density bots easily identified by attribute sparsity.</li>
+              <li><strong>Archetype B (Dense Spammer):</strong> Randomly saturated profile fields, detectable via density anomalies.</li>
+              <li><strong>Archetype C (Camouflage Mimic):</strong> Copies genuine victim attributes. Represents the critical challenge where non-relational models struggle (70.8% recall on tabular RF).</li>
+              <li><strong>Archetype D (Sybil Ring):</strong> Planted dense cliques with intra-group connectivity designed for GNN topological discovery.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

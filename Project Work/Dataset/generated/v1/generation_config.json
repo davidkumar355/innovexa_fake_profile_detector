@@ -1,0 +1,47 @@
+{
+  "dataset_name": "Facebook SNAP Augmented (Synthetic Fake Profiles v1)",
+  "random_seed": 42,
+  "date_created": "2026-10-07",
+  "num_total_nodes": 4489,
+  "num_genuine_nodes": 4039,
+  "num_fake_nodes": 450,
+  "fake_ratio_percent": 10.02,
+  "total_edges": 102561,
+  "feature_dimension": 1406,
+  "archetypes": {
+    "A": {
+      "name": "Obvious Bot",
+      "count": 112,
+      "targeting": "uniform_random",
+      "features": "low_density_sparse"
+    },
+    "B": {
+      "name": "Hub Targeter",
+      "count": 157,
+      "targeting": "preferential_hub",
+      "features": "moderate_density_random"
+    },
+    "C": {
+      "name": "Camouflaged",
+      "count": 135,
+      "targeting": "community_embedded_circle",
+      "features": "victim_profile_mimicking"
+    },
+    "D": {
+      "name": "Sybil Ring",
+      "count": 46,
+      "targeting": "sybil_clique_hub_sharing",
+      "features": "coordinated_base_template"
+    }
+  },
+  "deliverables": [
+    "final_edge_list.txt",
+    "final_features.npy",
+    "final_labels.npy",
+    "fake_metadata.csv",
+    "global_featnames.txt",
+    "id_shuffle_map.json",
+    "generation_config.json",
+    "validation_report.txt"
+  ]
+}

@@ -1,0 +1,43 @@
+===========================================================
+     SYNTHETIC DATASET SANITY & DIFFICULTY REPORT
+===========================================================
+Total Nodes: 4489 (Genuine: 4039, Fake: 450)
+Total Edges: 102561
+Graph Density: 0.010181
+Average Degree: 45.69 (std: 56.10)
+
+--- Baseline 1: Degree Threshold (degree > mean + 2*sigma) ---
+Threshold: 157.90
+Flagged Nodes: 250 (True Positives: 0)
+Precision: 0.00% (Requirement: < 65.0%)
+Recall: 0.00%
+Gate Status: PASS
+
+--- Baseline 2: Feature Sparsity Heuristic (density < 0.005) ---
+Flagged Nodes: 1571 (True Positives: 39)
+Precision: 2.48% (Requirement: < 70.0%)
+Recall: 8.67%
+Gate Status: PASS
+
+--- Baseline 3: Isolated Node Detector ---
+Total Isolated Nodes: 0
+Isolated Fakes: 0
+Gate Status: PASS
+
+--- Baseline 4: Fake-Only Connected Components ---
+Components Count: 1
+Fake-Only Components: 0
+Gate Status: PASS
+
+--- Baseline 5: ID-Ordering Leakage ---
+Fake Node Index Range: [4, 4483]
+Fake Nodes Clustered at Tail: False
+Max Contiguous Fake Run: 3
+Gate Status: PASS
+
+--- Baseline 6: Camouflage Triadic Closure (Archetype C) ---
+Archetype C Nodes: 135
+Nodes with Non-Zero Clustering Coeff: 135 (100.0%)
+Mean Clustering Coeff (Archetype C): 0.1010
+Gate Status: PASS
+===========================================================
