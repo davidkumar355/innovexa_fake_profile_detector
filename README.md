@@ -11,14 +11,16 @@
 
 ## 📌 Table of Contents
 1. [Overview & Problem Statement](#-overview--problem-statement)
-2. [Key Highlights & Performance](#-key-highlights--performance)
-3. [The 4 Synthetic Fake Archetypes](#-the-4-synthetic-fake-archetypes)
-4. [System Architecture](#-system-architecture)
-5. [Repository Structure](#-repository-structure)
-6. [Interactive Web Dashboard Views](#-interactive-web-dashboard-views)
-7. [API Reference & Endpoints](#-api-reference--endpoints)
-8. [Quickstart Guide (Local Setup)](#-quickstart-guide-local-setup)
-9. [Verification & Test Results](#-verification--test-results)
+2. [Why Synthetic Fake Injection Was Necessary](#-why-synthetic-fake-injection-was-necessary)
+3. [Synthetic Fake Generation Pipeline (Step-by-Step)](#-synthetic-fake-generation-pipeline-step-by-step)
+4. [The 4 Threat Archetypes In Detail](#-the-4-threat-archetypes-in-detail)
+5. [Key Highlights & Performance](#-key-highlights--performance)
+6. [System Architecture](#-system-architecture)
+7. [Repository Structure](#-repository-structure)
+8. [Interactive Web Dashboard Views](#-interactive-web-dashboard-views)
+9. [API Reference & Endpoints](#-api-reference--endpoints)
+10. [Quickstart Guide (Local Setup)](#-quickstart-guide-local-setup)
+11. [Verification & Acceptance Results](#-verification--acceptance-results)
 
 ---
 
@@ -50,31 +52,86 @@ Evaluated against a test split of **674 profiles** across the verified Facebook 
 
 ---
 
-## 🎭 The 4 Synthetic Fake Archetypes
+## 💡 Why Synthetic Fake Injection Was Necessary
 
-The synthetic injection framework benchmarks models against four distinct threat models:
+The original Stanford SNAP Facebook dataset (`facebook_combined.txt` and ego networks) is a clean, authentic social network containing **4,039 real profiles and 88,234 friendship edges**. Crucially:
+> **The original dataset only contains genuine users ($y = 0$). There were zero labeled fake or malicious accounts.**
+
+To train and evaluate supervised detection models, we needed realistic counterexamples ($y = 1$). However, **naive fake generation creates severe flaws**:
+1. *Random bit-flip profiles* create statistically impossible attribute combinations (e.g., conflicting demographic markers).
+2. *Appending fake nodes to the end of the ID list* (IDs 4040–4489) creates **ID-ordering leakage**, where any model easily learns `if node_id > 4039: fake` without learning fraud patterns.
+3. *Disconnected fake clusters* create **topological leakage**, trivially detected by simple connected component checks.
+
+To prevent artificial shortcuts and enforce true relational learning, we designed a **7-Phase Realistic Synthetic Injection Engine** with strict anti-leakage gates.
+
+---
+
+## ⚙️ Synthetic Fake Generation Pipeline (Step-by-Step)
+
+The synthetic generation process is implemented in `Project Work/Backend/synthetic_injection/` and fully automated:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       INJECTED THREAT ARCHETYPES                            │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  Archetype A: Feature Sparsity Bot (25% of fakes)                           │
-│  Minimal profile details (< 0.05 density), superficial connections.         │
-│  [RF Recall: 85.7% | LR Recall: 100.0%]                                    │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  Archetype B: Dense Attribute Spammer (35% of fakes)                        │
-│  Oversaturated profile fields (10-30% density), abnormal field counts.      │
-│  [RF Recall: 100.0% | LR Recall: 100.0%]                                   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  Archetype C: Camouflage Mimic (30% of fakes)                               │
-│  Clones authentic victim profiles (cosine sim > 0.80) + closed triangles.   │
-│  Hardest for tabular models! [RF Recall: 70.8% | Headroom for GNNs]         │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  Archetype D: Sybil Ring Cliques (10% of fakes)                             │
-│  Planted dense intra-ring cliques with coordinated cross-links.             │
-│  [RF Recall: 100.0% | Isolated in Louvain Communities]                      │
-└─────────────────────────────────────────────────────────────────────────────┘
+[Phase 1: Unified Schema]  Union all 10 ego networks -> standard 1,406-dim space
+          │
+[Phase 2: Graph Assembly]  Load 4,039 real nodes + 88,234 edges (all labeled y=0)
+          │
+[Phase 3: Archetype Gen]   Synthesize 450 fakes (10.02% ratio) across 4 difficulty tiers
+          │
+[Phase 4: Graph Injection] Inject 14,327 edges connecting fakes to real communities
+          │
+[Phase 5: ID Permutation]  Bijective random shuffle across all 4,489 node IDs
+          │
+[Phase 6: Difficulty Gate] Validate heuristic baselines fail (degree & sparsity < 70%)
+          │
+[Phase 7: Final Artifacts] Save standardized edge lists, feature matrices, metadata
 ```
+
+### Detailed Breakdown of the 7 Phases:
+
+1. **Phase 1 — Unified Feature Space Construction**:
+   - Each of Facebook's 10 ego networks had separate, unaligned `.featnames` mappings.
+   - We parsed and unioned all feature definitions into a single master index of **1,406 binary attribute columns** across 14 categories (`birthday`, `education`, `work`, `hometown`, `languages`, etc.).
+   - All 4,039 genuine profiles were re-indexed into this global space.
+
+2. **Phase 2 — Real Graph Ingestion**:
+   - Extracted 193 genuine social circles (`circles_data.json`) to serve as targets for community-embedded attacks.
+
+3. **Phase 3 — Controlled Synthetic Generation**:
+   - Synthesized exactly **450 fake profiles** to establish a realistic **10.02% class imbalance ratio** (avoiding unrealistic 50/50 artificial splits).
+   - Enforced internal attribute coherence by sampling from real feature co-occurrence templates rather than flipping uncorrelated random bits.
+
+4. **Phase 4 — Realistic Topological Injection**:
+   - Injected **14,327 new edges** (14,170 fake-to-real edges + 157 Sybil clique edges).
+   - **0 isolated fakes**: Every fake account establishes edges into the real graph.
+   - Preserved **100% connectivity** in the largest connected component.
+
+5. **Phase 5 — Bijective Node ID Shuffling (Leakage Elimination)**:
+   - Generated a random bijective permutation of all 4,489 node IDs.
+   - Fake nodes were interleaved across the entire graph (minimum ID: 4, maximum ID: 4,483, median ID: 2,449.0).
+   - Prevents models from exploiting index sequence as a decision shortcut.
+
+6. **Phase 6 — Sanity & Difficulty Validation**:
+   - Executed heuristic trap baselines to ensure the synthetic fakes are challenging:
+     - *Degree-threshold baseline precision*: **0.00%** (fakes cannot be found by degree alone).
+     - *Feature-sparsity baseline precision*: **2.48%** (fakes cannot be caught by empty profiles).
+     - *Camouflage triadic closure*: **100.0%** of Archetype C fakes possess closed local triangles (mean clustering coefficient: 0.1010).
+
+7. **Phase 7 — Artifact Finalization**:
+   - Exported standardized, versioned deliverables (`final_edge_list.txt`, `final_features.npy`, `final_labels.npy`, and `fake_metadata.csv`) ready for modeling.
+
+---
+
+## 🎭 The 4 Threat Archetypes In Detail
+
+The synthetic population covers a graded difficulty spectrum matching real-world platform threats:
+
+| Archetype | Name | Share | Feature Strategy | Graph Attachment Strategy | Detection Difficulty |
+|---|---|---|---|---|---|
+| **A** | **Sparsity Bot** | 24.9% (112 nodes) | Minimal profile density (`< 0.05`, mean: 0.0148) | Random attachment across graph | **Easy** (Sanity baseline) |
+| **B** | **Dense Spammer** | 34.9% (157 nodes) | Saturated attributes (`0.10 - 0.30`, mean: 0.1800) | Preferential attachment to high-degree hubs | **Medium** (High feature noise) |
+| **C** | **Camouflage Mimic** | 30.0% (135 nodes) | Clones real victim features (`cosine_sim = 0.8444`) | Community-embedded within genuine friend circles | **Hard** (Tabular RF recall drops to 70.8%) |
+| **D** | **Sybil Ring Clique**| 10.2% (46 nodes) | High intra-ring feature coherence (`0.8975`) | Dense internal cliques (6 rings) + shared bridge edges | **Topological** (Louvain community targets) |
+
 
 ---
 
